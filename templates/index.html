@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARK</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // form submission
+            function handleSubmit(event) {
+                event.preventDefault();
+                var prompt = $('#prompt').val();
+                $.ajax({
+                    url: '/',
+                    type: 'POST',
+                    data: { prompt: prompt },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            $('#chatbox').append('<p><strong>You:</strong> ' + prompt + '</p>');
+                            $('#chatbox').append('<p><strong>MAX:</strong> ' + data.response + '</p>');
+                        } else {
+                            $('#chatbox').append('<p><strong>Error:</strong> ' + data.error + '</p>');
+                        }
+                        $('#prompt').val('');  // Clear the input field
+                    }
+                });
+            }
+
+            // Submit form on Enter key press in textarea
+            $('#prompt').keypress(function(event) {
+                if (event.which == 13) {  // Enter key pressed
+                    handleSubmit(event);
+                }
+            });
+
+            // Submit form button 
+            $('form').on('submit', function(event) {
+                handleSubmit(event);
+            });
+        });
+    </script>
+<style>
+    /* Reset and General Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #1a1a1a; /* Dark background */
+    color: #ccc; /* Light text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #2a2a2a; /* Darker container background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Increased shadow for depth */
+}
+
+/* Heading Styles */
+h1 {
+    text-align: center;
+    color: #eee; /* Light heading color */
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Bot Section Styles */
+#chatbox {
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #383838, #2a2a2a); /* Gradient background */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow: hidden; /* Ensure gradient doesn't overflow */
+    transition: transform 0.3s ease-in-out; /* Smooth transform animation */
+}
+
+#chatbox:hover {
+    transform: scale(1.02); /* Scale up on hover */
+}
+
+/* Form and Input Styles */
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ccc; /* Light label color */
+}
+
+textarea, button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #444; /* Darker border for inputs */
+    border-radius: 4px;
+    background-color: #333; /* Dark input background */
+    color: #ccc; /* Light text color */
+    transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions */
+    resize: vertical;
+}
+
+button {
+    margin-top: 10px;
+    background-color: #4CAF50; /* Green submit button */
+    color: white; /* Light text color */
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: translateY(-2px); /* Move up slightly on hover */
+}
+
+/* Improved Accessibility */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4CAF50; /* Add focus style */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    button {
+        padding: 8px 16px;
+    }
+}
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>SPARK</h1>
+        <h2>Ask me anything</h2>
+        <div id="chatbox">
+            
+        </div>
+        <form method="POST">
+            <label for="prompt">Prompt:</label>
+            <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
