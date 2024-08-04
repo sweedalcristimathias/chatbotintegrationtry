@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
 import logging
-
+# added a comment here 
 app = Flask(__name__)
 
 # Set your Gemini API key here or load from an environment variable
